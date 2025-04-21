@@ -1,0 +1,14 @@
+{% extends "farmshop/layout.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block title %}
+    Adressformular
+{% endblock %}
+{% block content %}
+    <form method="POST" class="postal-address-form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="save btn btn-default"value="Speichern">
+    </form>
+{% endblock %}

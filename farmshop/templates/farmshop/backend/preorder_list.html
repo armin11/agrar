@@ -1,0 +1,42 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Packungen/Pakete
+{% endblock %}
+{% block content %}
+<h2>Vorbestellungsaktionen für meinen Hofladen</h2>
+<p><a href="{% url 'preorder-create' shopid=farmshop.id%}">Vorbestellungsaktion anlegen</a></p>
+{% if preorder_list %}
+    <table class="preorder_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Anmerkung</th>
+            <th>Beginn</th>
+            <th>Ende</th>
+            <th>Maximale Bestellungen</th>
+            <th>Aktuelle Bestellungen</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for preorder in preorder_list %}
+            <tr>
+                <td>{{ preorder.id }}</td>
+                <td>{{ preorder.created }}</td>
+                <td>{{ preorder.changed }}</td>
+                <td>{{ preorder.notice }}</td>
+                <td>{{ preorder.start_date }}</td>
+                <td>{{ preorder.end_date }}</td>
+                <td>{{ preorder.max_packages }}</td>
+                <td><a href="{% url 'preorder-detail' pk=preorder.id shopid=farmshop.id%}">{{ preorder.order_set.all.count }}</a></td>
+                <td><a href="{% url 'preorder-update' pk=preorder.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'preorder-delete' pk=preorder.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

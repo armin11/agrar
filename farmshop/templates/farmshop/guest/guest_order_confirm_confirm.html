@@ -1,0 +1,23 @@
+
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+    <!--Meine Bestellung-->
+{% endblock %}
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p>Wollen sie die Bestellung "{{ order }}" bestätigen? Nach der Bestätigung kann sie nicht mehr verändert, nur noch storniert werden!</p>
+    {{ form }}
+    <input type="submit" class="btn btn-danger" value="Bestätigen">
+    <a class="btn btn-success" href="#" role="button" onclick="history.go(-1)">Abbrechen</a>
+</form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+    <!--Bestellbare Packungen/Pakete-->
+{% endblock %}
+{% block content %}
+<h2>Bestellbare Packungen/Pakete</h2>
+{% if package %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Beschreibung</th>
+            <th scope="col">Inhalt</th>
+            <th scope="col">Einheit</th>
+            <th scope="col">Einzelpreis</th>
+            <th scope="col"># online verfügbar</th>
+            <th scope="col"># aktuell bestellt</th>
+            <th scope="col"># verfügbar</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package_object in package %}
+            <tr scope="row">
+                <td>{{ package_object.id }}</td>
+                <td>{{ package_object.title }}</td>
+                <td>{{ package_object.description }}</td>
+                <td>{{ package_object.units }}</td>
+                <td>{{ package_object.get_unit_display }}</td>
+                <td>{{ package_object.price }}€</td>
+                <td>{{ package_object.sum_online_quota }}</td>
+                <td>{{ package_object.sum_ordered }}</td>
+                <td>{{ package_object.available }}</td>
+                <td><a class="btn btn-success" role="button" href="{% url 'hofladen-order-append-orderline' shopid=package_object.farmshop.id generic_id=generic_id package_id=package_object.id max_amount=package_object.available %}">In den Warenkorb</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

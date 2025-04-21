@@ -1,0 +1,40 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Packungen/Pakete
+{% endblock %}
+{% block content %}
+<h2>Meine Packungen/Pakete</h2>
+<p><a href="{% url 'inventory-create' shopid=farmshop.id%}">Inventar anlegen</a></p>
+{% if inventory_list %}
+    <table class="inventory_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Warenlager</th>
+            <th>Packung/Paket</th>
+            <th>Menge</th>
+            <th>Online Kontingent</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for inventory in inventory_list %}
+            <tr>
+                <td>{{ inventory.id }}</td>
+                <td>{{ inventory.created }}</td>
+                <td>{{ inventory.changed }}</td>
+                <td>{{ inventory.warehouse }}</td>
+                <td>{{ inventory.package }}</td>
+                <td>{{ inventory.units }}</td>
+                <td>{{ inventory.online_quota }}</td>
+                <td><a href="{% url 'inventory-update' pk=inventory.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'inventory-delete' pk=inventory.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

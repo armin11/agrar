@@ -1,0 +1,37 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+<!--test titel-->
+{% endblock %}
+{% block content %}
+{% if farmshop.farmshopinfo_set.count > 0 %}
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" width="300px">
+    <ol class="carousel-indicators">
+        {% for info in farmshop.farmshopinfo_set.all %}
+        <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active"{% endif %}></li>
+        {% endfor %}
+    </ol>    
+    <div class="carousel-inner">
+      {% for info in farmshop.farmshopinfo_set.all %}
+      <div class="carousel-item{% if forloop.first %} active{% endif %}">
+        <img src="{{ info.image.url }}" class="d-block w-100" alt="Bild für {{ info.title}}">
+        <div class="carousel-caption d-none d-md-block">
+            <h5>{{ info.title }}</h5>
+            <p>{{ info.description }}</p>
+        </div>    
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </button>
+</div>
+{% else %}
+{{ farmshop.description }}
+{% endif %}
+{% endblock %}

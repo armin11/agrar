@@ -1,0 +1,84 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+    <!--Meine Bestellung-->
+{% endblock %}
+{% block content %}
+<h2>Meine Bestellung {{ order.generic_id }}</h2>
+<p><b>Laufende Nummer:</b> {{ order.id }}</p>
+<p><b>Kunde:</b> {{ order.customer.name }}, {{ order.customer.first_name }}</p>
+<p><b>Notiz:</b> {{ order.notice }}</p>
+<p><b>Bestelldatum:</b> {{ order.changed }}</p>
+<p><b>Abholdatum:</b> {{ order.target_date }}</p>
+<p><b>Gesamtpreis:</b> {{ order.total_price|floatformat:2 }} €</p>
+{% if order.confirmed %}
+{% if not order.cancelled %}
+<div class="alert alert-danger" role="alert">
+    Bestellung wurde schon bestätigt und kann nicht mehr editiert werden!
+</div>
+{% endif %}
+{% endif %}
+{% if order.cancelled %}
+<div class="alert alert-danger" role="alert">
+    Bestellung wurde storniert!
+</div>
+{% endif %}
+<hr>
+{% if not order.confirmed and not order.cancelled %}
+<a class="btn btn-success" role="button" href="{% url 'hofladen-orderform-update' shopid=order.farmshop.id generic_id=order.generic_id %}">Grunddaten anpassen</a>
+<a class="btn btn-danger" role="button" href="{% url 'hofladen-orderform-delete' shopid=order.farmshop.id generic_id=order.generic_id %}">Bestellung löschen</a>
+{% if order.orderline_set.count > 0 %}
+<a class="btn btn-success" role="button" href="{% url 'hofladen-orderform-confirm' shopid=order.farmshop.id generic_id=order.generic_id %}">Bestellung bestätigen</a>
+{% endif %}
+{% endif %}
+{% if order.confirmed %}
+{% if not order.cancelled %}
+<a class="btn btn-danger" role="button" href="{% url 'hofladen-orderform-cancel' shopid=order.farmshop.id generic_id=order.generic_id %}">Bestellung stornieren</a>
+{% endif %}
+{% endif %}
+<hr>
+<h2>Warenkorb</h2>
+{% if not order.confirmed and not order.cancelled %}
+<a class="btn btn-success" role="button" href="{% url 'hofladen-available-package-list' shopid=order.farmshop.id generic_id=order.generic_id %}">+ Artikel hinzufügen</a>
+{% endif %}
+<hr>
+{% if order.orderline_set.count > 0 %}
+    <table class="orderline_list">
+        <thead>
+        <tr>
+            <th class="col">Packung / Paket</th>
+            <th class="col">Menge</th>
+            <th class="col">Einzelpreis</th>
+            <th class="col">Gesamtpreis</th>
+            <th class="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for orderline in order.orderline_set.all %}
+        <tr>
+            <td>{{ orderline.package }}</td>
+            <td>{{ orderline.amount }}</td>
+            <td>{{ orderline.package.price }} €</td>
+            <td>{{ orderline.total_price|floatformat:2 }} €</td>
+            {% if not order.confirmed and not order.cancelled %}
+            <td><a class="btn btn-danger" role="button" href="{% url 'hofladen-order-delete-orderline' orderline_id=orderline.generic_id shopid=order.farmshop.id order_id=orderline.order.generic_id%}">Löschen</a></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% if order.orderline_set.count == 0 %}
+Ihr Warenkorb ist leer
+{% endif %}
+
+{% endblock %}

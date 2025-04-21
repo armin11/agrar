@@ -1,0 +1,39 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Bestellbare Packungen/Pakete
+{% endblock %}
+{% block content %}
+<h2>Bestellbare Packungen/Pakete</h2>
+{% if package %}
+    <table class="package">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Menge</th>
+            <th>Einheit</th>
+            <th># online verfügbar</th>
+            <th># aktuell bestellt</th>
+            <th># verfügbar</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package_object in package %}
+            <tr>
+                <td>{{ package_object.id }}</td>
+                <td>{{ package_object.title }}</td>
+                <td>{{ package_object.description }}</td>
+                <td>{{ package_object.units }}</td>
+                <td>{{ package_object.get_unit_display }}</td>
+                <td>{{ package_object.sum_online_quota }}</td>
+                <td>{{ package_object.sum_ordered }}</td>
+                <td>{{ package_object.available }}</td>
+                <td><a href="{% url 'order-append-orderline' shopid=package_object.farmshop.id generic_id=generic_id package_id=package_object.id max_amount=package_object.available %}">In den Warenkorb</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

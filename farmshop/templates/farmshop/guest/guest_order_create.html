@@ -1,0 +1,17 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% load bootstrap4 %}
+{% block title %}
+  Bestellung anlegen
+{% endblock %}
+{% block content %}
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{ form1.media }}
+    {{ form2.media }}
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form1 %}
+        {% bootstrap_form form2 %}
+        <button>Anlegen</button>
+    </form>
+{% endblock %}

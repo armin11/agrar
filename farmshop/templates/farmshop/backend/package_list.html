@@ -1,0 +1,40 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Packungen/Pakete
+{% endblock %}
+{% block content %}
+<h2>Meine Packungen/Pakete</h2>
+<p><a href="{% url 'package-create' shopid=farmshop.id%}">Packung/Paket anlegen</a></p>
+{% if package_list %}
+    <table class="package_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Menge</th>
+            <th>Einheit</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package in package_list %}
+            <tr>
+                <td>{{ package.id }}</td>
+                <td>{{ package.created }}</td>
+                <td>{{ package.changed }}</td>
+                <td>{{ package.title }}</td>
+                <td>{{ package.description }}</td>
+                <td>{{ package.units }}</td>
+                <td>{{ package.get_unit_display }}</td>
+                <td><a href="{% url 'package-update' pk=package.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'package-delete' pk=package.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

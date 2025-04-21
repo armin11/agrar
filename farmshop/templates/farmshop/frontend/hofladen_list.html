@@ -1,0 +1,31 @@
+{% extends "farmshop/frontend/hofladen_list_layout.html" %}
+{% block title %}
+   Liste der Hofläden
+{% endblock %}
+{% block content %}
+{% if farmshop_list %}
+<!-- https://www.paulox.net/2020/12/08/maps-with-django-part-1-geodjango-spatialite-and-leaflet/ -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Beschreibung</th>
+            <th scope="col">Logo</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for farmshop in farmshop_list %}
+            <tr>
+                <td scope="row">{{ farmshop.id }}</td>
+                <td scope="row"><a href="{% url 'hofladen-detail' farmshop.id%}">{{ farmshop.title }}</a></td>
+                <td scope="row">{{ farmshop.description }}</td>
+                <td scope="row">{% if farmshop.farmshop_logo %}<img height="50px" src="{{farmshop.farmshop_logo.url}}">{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+<!-- map with geojson features -->
+{{ markers }}
+{% endblock %}

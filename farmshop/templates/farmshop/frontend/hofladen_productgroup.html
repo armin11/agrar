@@ -1,0 +1,28 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+<!--Produktgruppen-->
+{% endblock %}
+{% block content %}
+<div class="row">
+{% for productgroup in farmshop.productgroup_set.all %}
+<div class="col-sm-6">
+  <div class="card" style="width: 18rem;">
+    {% if productgroup.image %}
+    <img src="{{ productgroup.image.url }}" height="200px" class="card-img-top" title="Bild für {{ productgroup.title }}" alt="{{ productgroup.title }}">
+    {% else %}
+    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ productgroup.title }} eingestellt!">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ productgroup.title }}</h5>
+      <p class="card-text">{{ productgroup.description }}</p>
+      {% if productgroup.product_set.all.count > 0 %}
+      <a href="{% url 'hofladen-productgroup-product' shopid=farmshop.id pk=productgroup.id %}" class="btn btn-success">Produkte ({{ productgroup.product_set.all.count }})</a>
+      {% else %}
+      <a href="#" class="btn btn-danger">Keine Produkte verfügbar!</a>
+      {% endif %}
+    </div>
+  </div>
+</div>  
+{% endfor %}
+</div>
+{% endblock %}

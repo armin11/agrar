@@ -1,0 +1,34 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Packungen/Pakete
+{% endblock %}
+{% block content %}
+<h2>Meine Bestellungen</h2>
+<p><a href="{% url 'order-create' shopid=farmshop.id%}">Bestellung anlegen</a></p>
+{% if order_list %}
+    <table class="order_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Beschreibung</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in order_list %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.created }}</td>
+                <td>{{ order.changed }}</td>
+                <td>{{ order.description }}</td>
+                <td><a href="{% url 'order-update' pk=order.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'order-delete' pk=order.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

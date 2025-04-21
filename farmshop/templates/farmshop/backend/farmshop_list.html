@@ -1,0 +1,40 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Firmenliste
+{% endblock %}
+{% block content %}
+<h2>Meine Hofläden</h2>
+<p><a href="{% url 'farmshop-create' %}">Neuen Hofladen anlegen</a></p>
+{% if farmshop_list %}
+    <table class="farmshop_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Logo</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for farmshop in farmshop_list %}
+            <tr>
+                <td><a href="{% url 'farmshop-detail' farmshop.id%}">{{ farmshop.id }} - Details</a></td>
+                <td>{{ farmshop.created }}</td>
+                <td>{{ farmshop.changed }}</td>
+                <td>{{ farmshop.title }}</td>
+                <td>{{ farmshop.description }}</td>
+
+                <td>{% if farmshop.logo %}<a target="_blank" href="{% url 'farmshop-logo' pk=mfarmshop.id%}">Download</a>{% endif %}</td>
+
+                <td><a href="{% url 'farmshop-update' farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'farmshop-delete' farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

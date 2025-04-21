@@ -1,0 +1,11 @@
+{% extends "farmshop/layout.html" %}
+{% load render_table from django_tables2 %}
+{% block title %}
+    Vorbestellung Detailanzeige
+{% endblock %}
+{% block content %}
+Vorbestellungen für Aktion <b>{{ preorder.package }}</b><br>
+Zeitraum: {{ preorder.start_date }} - {{ preorder.end_date }}<br>
+Bestellte Pakete: {{ already_ordered }} ({{ preorder.max_packages }})
+{% render_table table %}
+{% endblock %}

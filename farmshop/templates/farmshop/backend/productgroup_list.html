@@ -1,0 +1,36 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Produktgruppen
+{% endblock %}
+{% block content %}
+<h2>Meine Produktgruppen</h2>
+<p><a href="{% url 'productgroup-create' shopid=farmshop.id%}">Produktgruppe anlegen</a></p>
+{% if productgroup_list %}
+    <table class="productgroup_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for productgroup in productgroup_list %}
+            <tr>
+                <td>{{ productgroup.id }}</td>
+                <td>{{ productgroup.created }}</td>
+                <td>{{ productgroup.changed }}</td>
+                <td>{{ productgroup.title }}</td>
+                <td>{{ productgroup.description }}</td>
+                <td><a href="{% url 'productgroup-update' pk=productgroup.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'productgroup-delete' pk=productgroup.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

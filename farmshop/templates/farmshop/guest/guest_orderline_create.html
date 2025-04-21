@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block title %}
+  Artikel zum Warenkorb hinzufügen
+{% endblock %}
+{% block content %}
+    <p><b>Bestellung:</b> {{ order.id }} </p>
+    <p><b>Paket / Packung:</b> {{ package }}</p>
+    <p><b>Einzelpreis:</b> {{ package.price }} €</p>
+    {{ form.media }}
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-success">Hinzufügen</button>
+    </form>
+{% endblock %}

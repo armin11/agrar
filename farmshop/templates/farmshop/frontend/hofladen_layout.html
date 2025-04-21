@@ -1,0 +1,78 @@
+{% extends 'farmshop/main.html' %}
+
+{% load bootstrap4 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full'%}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% block bootstrap4_content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'hofladen-detail' farmshop.id%}"><img height="150px" src="{{ farmshop.farmshop_logo.url }}" title="{{ farmshop.title }}" alt= "Logo fehlt!"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container-fluid">
+            <h1 style="color:black;">Mein Hofladen<br>{{ farmshop.title }}</h1>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'hofladen-news' farmshop.id %}">News</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'hofladen-package-preorder' farmshop.id %}">Aktuelle Vorbestellungen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-productgroup' farmshop.id %}">Produktgruppen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-product' farmshop.id %}">Produkte</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-package' farmshop.id %}">Packungen/Pakete</a>
+            </li>
+            {% if 'order_id' in request.session %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-orderform-configure' shopid=farmshop.id generic_id=request.session.order_id %}">Aktuelle Bestellung</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-orderform-create' farmshop.id %}">Bestellen</a>
+            </li>
+            {% endif%}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-address' farmshop.id %}">Anfahrt</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-impressum' farmshop.id %}">Impressum</a>
+            </li>
+            <!--<li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>-->
+            </ul>
+            <!--<form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>-->
+        </div>
+    </nav>
+    <div class="container">
+        <h1>{% block title %}(no title){% endblock %}</h1>
+
+
+        {% block content %}(no content){% endblock %}
+    </div>
+
+{% endblock %}

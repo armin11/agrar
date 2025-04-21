@@ -1,0 +1,36 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+  News
+{% endblock %}
+{% block content %}
+<h2>Meine News</h2>
+<p><a href="{% url 'farmshopnews-create' shopid=farmshop.id%}">News anlegen</a></p>
+{% if farmshopnews_list %}
+    <table class="farmshopnews_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for farmshopnews in farmshopnews_list %}
+            <tr>
+                <td>{{ farmshopnews.id }}</td>
+                <td>{{ farmshopnews.created }}</td>
+                <td>{{ farmshopnews.changed }}</td>
+                <td>{{ farmshopnews.title }}</td>
+                <td>{{ farmshopnews.description }}</td>
+                <td><a href="{% url 'farmshopnews-update' pk=farmshopnews.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'farmshopnews-delete' pk=farmshopnews.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

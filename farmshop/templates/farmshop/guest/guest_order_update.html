@@ -1,0 +1,15 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% load bootstrap4 %}
+{% block title %}
+  Bestellinformationen editieren
+{% endblock %}
+{% block content %}
+    {{ form1.media }}
+    {{ form2.media }}
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form1 %}
+        {% bootstrap_form form2 %}
+        <button class="btn btn-warning">Aktualisieren</button>
+    </form>
+{% endblock %}

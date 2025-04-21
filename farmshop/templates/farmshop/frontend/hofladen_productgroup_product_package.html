@@ -1,0 +1,27 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+<!--Pakete/Packungen-->
+{% endblock %}
+{% block content %}
+<div class="row">
+{% for package in packages %}
+<div class="col-sm-6">
+  <div class="card" style="width: 18rem;">
+    {% if package.image %}
+    <img src="{{ package.image.url }}" height="200px" class="card-img-top" title="Bild für {{ package.title }}" alt="{{ package.title }}">
+    {% else %}
+    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ package.title }} eingestellt!">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ package.title }} ({{ package.product.title }})</h5>
+      <p class="card-text">{{ package.description }}</p>
+      <p class="card-text">{{ package.units }} {{ package.get_unit_display }}</p>
+      <p class="card-text">{{ package.price }}€</p>
+      <a href="#" class="btn btn-danger">Noch nichts eingestellt</a>
+    </div>
+  </div>
+</div>  
+{% endfor %}
+</div>
+
+{% endblock %}

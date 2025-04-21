@@ -1,0 +1,9 @@
+Django
+django-bootstrap4
+django-bootstrap-datepicker-plus
+pillow
+django-crispy-forms
+crispy-tailwind
+crispy-bootstrap4
+django-simple-captcha
+django-leaflet

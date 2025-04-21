@@ -1,0 +1,30 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+<!--News-->
+{% endblock %}
+{% block content %}
+<div class="row">
+{% for news in news %}
+<div class="col-sm-6">
+  <div class="card" style="width: 18rem;">
+    {% if news.image %}
+    <img src="{{ news.image.url }}" height="200px" class="card-img-top" title="Bild für {{ news.title }}" alt="{{ news.title }}">
+    {% else %}
+    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ news.title }} eingestellt!">
+    {% endif %}
+    <div class="card-body">
+      <p class="card-text">{{ news.publication_date }}</p>
+      <h5 class="card-title">{{ news.title }}</h5>
+      <p class="card-text">{{ news.description }}</p>
+      {% if news.url %}
+      <a href="{{ news.url }}" target="_blank" class="btn btn-danger">Weitere Infos</a>
+      {% else %}
+      
+      {% endif %}
+    </div>
+  </div>
+</div>  
+{% endfor %}
+</div>
+
+{% endblock %}

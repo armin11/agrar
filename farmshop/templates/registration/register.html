@@ -1,0 +1,12 @@
+{% extends "../farmshop/layout.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block content %}
+<h2>Registrieren</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit">Registrieren</button>
+    </form>
+{% endblock %}

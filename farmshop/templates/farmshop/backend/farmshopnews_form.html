@@ -1,0 +1,18 @@
+{% extends "farmshop/layout.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{% block title %}
+    Meine News bearbeiten
+{% endblock %}
+{% block content %}
+<!-- Load jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{ form.media }}
+    <form method="POST" class="log-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="save btn btn-default">Speichern</button>
+    </form>
+{% endblock %}

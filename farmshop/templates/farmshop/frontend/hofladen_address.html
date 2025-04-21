@@ -1,0 +1,21 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+{% endblock %}
+{% load leaflet_tags %}
+{% block content %}
+{% if farmshop.postal_address.location %}
+<script>
+    function map_init_basic (map, options) {
+        L.marker([{{ farmshop.postal_address.location.coords.1|safe }}, {{ farmshop.postal_address.location.coords.0|safe }}]).addTo(map);
+        map.setZoom(14);
+        map.panTo([{{ farmshop.postal_address.location.coords.1|safe }}, {{ farmshop.postal_address.location.coords.0|safe }}]);
+    }
+</script>
+{% leaflet_map "yourmap" callback="window.map_init_basic" %}
+{% endif %}
+<b>Adresse:</b><br/>
+{{ farmshop.title }}<br/>
+{{ farmshop.postal_address.street_name }}<br/>
+<b>{{ farmshop.postal_address.postal_zone }}</b> {{ farmshop.postal_address.city_name }}<br/>
+
+{% endblock %}

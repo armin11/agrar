@@ -1,0 +1,21 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Hofladen Detailanzeige
+{% endblock %}
+{% block content %}
+<h2>{{  farmshop.title }}</h2>
+<ul>
+    <li><a href="{% url 'productgroup-list' farmshop.id%}">Produktgruppen ({{ farmshop.productgroup_set.all.count }})</a></li>
+    <li><a href="{% url 'product-list' farmshop.id%}">Produkte ({{ farmshop.product_set.all.count }})</a></li>
+    <li><a href="{% url 'warehouse-list' farmshop.id%}">Warenlager ({{ farmshop.warehouse_set.all.count }})</a></li>
+    <li><a href="{% url 'package-list' farmshop.id%}">Packungen/Pakete ({{ farmshop.package_set.all.count }})</a></li>
+    <li><a href="{% url 'inventory-list' farmshop.id%}">Inventar ({{ farmshop.inventory_set.all.count }})</a></li>
+    <li><a href="{% url 'farmshopnews-list' farmshop.id%}">News ({{ farmshop.farmshopnews_set.all.count }})</a></li>
+    <li><a href="{% url 'farmshopinfo-list' farmshop.id%}">Infos ({{ farmshop.farmshopinfo_set.all.count }})</a></li>
+    <li><a href="{% url 'order-list' farmshop.id%}">Bestellungen ({{ farmshop.order_set.all.count }})</a></li>
+    <li><a href="{% url 'preorder-list' farmshop.id%}">Vorbestellungen ({{ farmshop.preorder_set.all.count }})</a></li>
+
+    <li><a href="{% url 'orderable-packages' farmshop.id%}">Bestellbare Packungen/Pakete</a></li>
+</ul>
+
+{% endblock %}

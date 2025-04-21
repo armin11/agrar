@@ -1,0 +1,38 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Produkte
+{% endblock %}
+{% block content %}
+<h2>Meine Produkte</h2>
+<p><a href="{% url 'product-create' shopid=farmshop.id%}">Produkt anlegen</a></p>
+{% if product_list %}
+    <table class="product_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Produktgruppe</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in product_list %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.created }}</td>
+                <td>{{ product.changed }}</td>
+                <td>{{ product.title }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.product_group }}</td>
+                <td><a href="{% url 'product-update' pk=product.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'product-delete' pk=product.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

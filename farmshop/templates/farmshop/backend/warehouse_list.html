@@ -1,0 +1,36 @@
+{% extends "farmshop/layout.html" %}
+{% block title %}
+    Warenlager
+{% endblock %}
+{% block content %}
+<h2>Meine Warenlager</h2>
+<p><a href="{% url 'warehouse-create' shopid=farmshop.id%}">Warenlager anlegen</a></p>
+{% if warehouse_list %}
+    <table class="warehouse_list">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Erstellt</th>
+            <th>Letzte Änderung</th>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for warehouse in warehouse_list %}
+            <tr>
+                <td>{{ warehouse.id }}</td>
+                <td>{{ warehouse.created }}</td>
+                <td>{{ warehouse.changed }}</td>
+                <td>{{ warehouse.title }}</td>
+                <td>{{ warehouse.description }}</td>
+                <td><a href="{% url 'warehouse-update' pk=warehouse.id shopid=farmshop.id%}">Bearbeiten</a></td>
+                <td><a href="{% url 'warehouse-delete' pk=warehouse.id shopid=farmshop.id%}">Löschen</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

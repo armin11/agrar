@@ -1,0 +1,76 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+    <!--Meine Bestellung-->
+{% endblock %}
+{% block content %}
+<h2>Meine Vorbestellung {{ order.generic_id }}</h2>
+<p><b>Laufende Nummer:</b> {{ order.id }}</p>
+<p><b>Kunde:</b> {{ order.customer.name }}, {{ order.customer.first_name }}</p>
+<p><b>Notiz:</b> {{ order.notice }}</p>
+<p><b>Bestelldatum:</b> {{ order.changed }}</p>
+<p><b>Gesamtpreis:</b> {{ order.total_price|floatformat:2 }} €</p>
+{% if order.confirmed %}
+{% if not order.cancelled %}
+<div class="alert alert-danger" role="alert">
+    Vorbestellung wurde schon bestätigt und kann nicht mehr editiert werden!
+</div>
+{% endif %}
+{% endif %}
+{% if order.cancelled %}
+<div class="alert alert-danger" role="alert">
+    Vorbestellung wurde storniert!
+</div>
+{% endif %}
+<hr>
+{% if not order.confirmed and not order.cancelled %}
+<a class="btn btn-danger" role="button" href="{% url 'hofladen-preorder-delete' shopid=order.farmshop.id generic_id=order.generic_id %}">Vorbestellung löschen</a>
+{% if order.orderline_set.count > 0 %}
+<a class="btn btn-success" role="button" href="{% url 'hofladen-preorder-confirm' shopid=order.farmshop.id generic_id=order.generic_id %}">Vorbestellung bestätigen</a>
+{% endif %}
+{% endif %}
+{% if order.confirmed %}
+{% if not order.cancelled %}
+<a class="btn btn-danger" role="button" href="{% url 'hofladen-preorder-cancel' shopid=order.farmshop.id generic_id=order.generic_id %}">Vorbestellung stornieren</a>
+{% endif %}
+{% endif %}
+<hr>
+<h2>Warenkorb</h2>
+<hr>
+{% if order.orderline_set.count > 0 %}
+    <table class="orderline_list">
+        <thead>
+        <tr>
+            <th class="col">Packung / Paket</th>
+            <th class="col">Menge</th>
+            <th class="col">Einzelpreis</th>
+            <th class="col">Gesamtpreis</th>
+            <th class="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for orderline in order.orderline_set.all %}
+        <tr>
+            <td>{{ orderline.package }}</td>
+            <td>{{ orderline.amount }}</td>
+            <td>{{ orderline.package.price }} €</td>
+            <td>{{ orderline.total_price|floatformat:2 }} €</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% if order.orderline_set.count == 0 %}
+Ihr Warenkorb ist leer
+{% endif %}
+
+{% endblock %}

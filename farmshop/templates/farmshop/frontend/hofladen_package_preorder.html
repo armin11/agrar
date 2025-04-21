@@ -1,0 +1,41 @@
+{% extends "farmshop/frontend/hofladen_layout.html" %}
+{% block title %}
+<!--Pakete/Packungen-->
+{% endblock %}
+{% block content %}
+<div class="row">
+{% for preorder in object_list %}
+<div class="col-sm-6">
+  <div class="card" style="width: 18rem;">
+    <p>Bestellung bis <b>{{ preorder.end_date }}</b></p>
+    {% if preorder.notice %}
+    <p>{{ preorder.notice }}</p>
+    {% endif %}
+    {% if preorder.package.image %}
+    <img src="{{ preorder.package.image.url }}" height="200px" class="card-img-top" title="Bild für {{ preorder.package.title }}" alt="{{ preorder.package.title }}">
+    {% else %}
+    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ preorder.package.title }} eingestellt!">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ preorder.package.title }}</h5>
+      <p class="card-text">{{ preorder.package.description }}</p>
+      <p class="card-text">{{ preorder.package.units }} {{ preorder.package.get_unit_display }}</p>
+      <p class="card-text">{{ preorder.package.price }}€</p>
+      <p class="card-text">Maximalzahl: {{ preorder.package.available_for_preorder }}</p>
+      <p class="card-text">Aktuelle Bestellungen:</p>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: {{ preorder.package.preordered_percentage }}%" aria-valuenow="{{ preorder.package.preordered }}" aria-valuemin="0" aria-valuemax="{{ preorder.package.available_for_preorder }}">{{ preorder.package.preordered }}</div>
+      </div>  
+      <br>    
+      {% if  preorder.package.preordered < preorder.package.available_for_preorder %}
+      <a href="{% url 'hofladen-preorder-append' shopid=farmshop.id preorder_id=preorder.generic_id %}" class="btn btn-success">Bestellen</a>
+      {% else %}
+      <a href="#" class="btn btn-danger">Liste voll</a>
+      {% endif %}
+    </div>
+  </div>
+</div>  
+{% endfor %}
+</div>
+
+{% endblock %}
