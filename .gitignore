@@ -22,4 +22,5 @@ static_collected/
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+.vscode
 
