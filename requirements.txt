@@ -9,3 +9,4 @@ django-simple-captcha
 django-leaflet
 django-cookie-consent
 django-appconf
+django_htmx
