@@ -1,9 +1,9 @@
 {% extends "farmshop/frontend/hofladen_layout.html" %}
 {% block title %}
 {% endblock %}
-
 {% block content %}
-Impressum
-
+{% autoescape off %}
+{{ farmshop.impressum }}
+{% endautoescape %}
 {% endblock %}
 

@@ -8,7 +8,7 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% block bootstrap4_content %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'hofladen-detail' farmshop.id%}"><img height="150px" src="{{ farmshop.farmshop_logo.url }}" title="{{ farmshop.title }}" alt= "Logo fehlt!"></a>
+        <a class="navbar-brand" href="{% url 'hofladen-detail' farmshop.id%}"><img height="100px" src="{{ farmshop.farmshop_logo.url }}" title="{{ farmshop.title }}" alt= "Logo fehlt!"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,6 +32,8 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hofladen-package' farmshop.id %}">Packungen/Pakete</a>
             </li>
+            <!-- Deaktivieren, wenn Bestellungen möglich sein sollen -->
+            {% if false %}
             {% if 'order_id' in request.session %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hofladen-orderform-configure' shopid=farmshop.id generic_id=request.session.order_id %}">Aktuelle Bestellung</a>
@@ -40,12 +42,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hofladen-orderform-create' farmshop.id %}">Bestellen</a>
             </li>
+            {% endif %}
             {% endif%}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hofladen-address' farmshop.id %}">Anfahrt</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hofladen-impressum' farmshop.id %}">Impressum</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hofladen-privacy' farmshop.id %}">Datenschutz</a>
             </li>
             <!--<li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -894,7 +894,7 @@ class FarmShopListView(MyListView):
 
 class FarmShopCreateView(MyCreateView):
     model = FarmShop
-    fields = ["title", "description", "farmshop_logo", "postal_address"]
+    fields = ["title", "description", "farmshop_logo", "contact_phone", "impressum", "postal_address"]
     success_url = reverse_lazy("farmshop-list")   
 
     def get_form(self, form_class=None):
@@ -906,7 +906,7 @@ class FarmShopCreateView(MyCreateView):
 class FarmShopUpdateView(MyUpdateView):
     model = FarmShop
 
-    fields = ["title", "description", "farmshop_logo", "postal_address"]
+    fields = ["title", "description", "farmshop_logo", "contact_phone", "impressum", "postal_address"]
     success_url = reverse_lazy("farmshop-list") 
 
     def get_form(self, form_class=None):

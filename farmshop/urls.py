@@ -36,6 +36,7 @@ urlpatterns = [
     path("hofladen/<int:pk>/product/", HofladenProductView.as_view(template_name="farmshop/frontend/hofladen_product.html"), name="hofladen-product"),
     path("hofladen/<int:pk>/news/", HofladenNewsView.as_view(template_name="farmshop/frontend/hofladen_news.html"), name="hofladen-news"),
     path("hofladen/<int:pk>/impressum/", HofladenDetailView.as_view(template_name="farmshop/frontend/hofladen_impressum.html"), name="hofladen-impressum"),
+    path("hofladen/<int:pk>/privacy/", HofladenDetailView.as_view(template_name="farmshop/frontend/hofladen_privacy.html"), name="hofladen-privacy"),
 
     path("hofladen/<int:shopid>/productgroup/<int:pk>/product/", HofladenProductGroupProductView.as_view(template_name="farmshop/frontend/hofladen_productgroup_product.html"), name="hofladen-productgroup-product"),
     path("hofladen/<int:shopid>/productgroup/<int:groupid>/product/<int:pk>/package/", HofladenProductGroupProductPackageView.as_view(template_name="farmshop/frontend/hofladen_productgroup_product_package.html"), name="hofladen-productgroup-product-package"),
