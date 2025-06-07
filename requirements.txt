@@ -10,4 +10,4 @@ django-leaflet
 django-cookie-consent
 django-appconf
 django_htmx
-django-bootstrap5
+django_bootstrap5
