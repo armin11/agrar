@@ -11,3 +11,4 @@ django-cookie-consent
 django-appconf
 django_htmx
 django_bootstrap5
+django_tables2
