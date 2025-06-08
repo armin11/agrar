@@ -365,12 +365,14 @@ def hofladen_preorder_create(request, shopid, preorder_id):
             preorder_url = reverse("hofladen-preorder-configure", args=[farmshop.id, order.generic_id])
             
             # Build complete URLs
+            #https://opensource.com/article/22/12/django-send-emails-smtp
+            #
             preorder_link = f"{preorder_url}"
             send_mail(
                 "Ihre Vorbestellung bei " + str(farmshop.title),
                 "Hier der Link: " + request.scheme + "://" + request.get_host() + preorder_link,
-                "from@example.com",
-                ["to@example.com"],
+                settings.EMAIL_HOST_USER,
+                [str(order.customer.email), ],
                 fail_silently=False,
             )
             # save id of created order to session 
@@ -454,8 +456,8 @@ def hofladen_preorder_confirm(request, shopid, generic_id):
         send_mail(
             "Ihre Vorbestellung bei " + str(farmshop.title),
             "Hier der Link: " + request.build_absolute_uri(),
-            "from@example.com",
-            ["to@example.com"],
+            settings.EMAIL_HOST_USER,
+            [str(order.customer.email), ],
             fail_silently=False,
         )
         return redirect("hofladen-preorder-configure", shopid=shopid, generic_id=order.generic_id)
@@ -506,7 +508,10 @@ def farmshop_preorder_package_delete():
 
 # Create your views here.
 def home(request):
-    my_shops = FarmShop.objects.filter(owned_by_user=request.user)
+    try:
+        my_shops = FarmShop.objects.filter(owned_by_user=request.user)
+    except:
+        my_shops = None
     context = { 'my_farmshops': my_shops, }
     return render(request, "farmshop/home.html", context)
 
