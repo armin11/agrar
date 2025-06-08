@@ -4,9 +4,14 @@
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full'%}
-
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% block bootstrap4_content %}
+<!-- add own css_style from farmshop object - if available -->
+{% if farmshop.css_style %}
+<style>
+    {{ farmshop.css_style }}
+</style>
+{% endif %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'hofladen-detail' farmshop.id%}"><img height="100px" src="{{ farmshop.farmshop_logo.url }}" title="{{ farmshop.title }}" alt= "Logo fehlt!"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
