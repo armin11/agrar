@@ -4,8 +4,7 @@
 {% endblock %}
 {% block content %}
 {% if farmshop.farmshopinfo_set.count > 0 %}
-
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" width="300px">
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         {% for info in farmshop.farmshopinfo_set.all %}
         <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active"{% endif %}></li>

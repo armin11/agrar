@@ -1,8 +1,68 @@
 {% extends "farmshop/frontend/hofladen_list_layout.html" %}
+{% load leaflet_tags %}
 {% block title %}
    Liste der Hofläden
 {% endblock %}
 {% block content %}
+{{ markers|json_script:"markers-data" }}
+<script>
+    let mapGlobal = {};
+    function map_init_basic (map, options) {
+        mapGlobal = map;
+        //https://stackoverflow.com/questions/43007019/leaflet-event-how-to-propagate-to-overlapping-layers
+        const data = document.getElementById("markers-data");
+        //console.log("data: " + data)
+        const markers = JSON.parse(data.textContent);
+        markers2 = JSON.parse(markers)
+        //console.log("markers: " + markers)
+        //console.log(markers2)
+        //map.setZoom(14);
+        
+        let feature = L.geoJSON(markers2, {
+            /*
+                style: function(feature) {
+                    switch (feature.properties.planart) {
+                        case '1000': return {color: "#ff0000"};
+                        case '10000':   return {color: "#0000ff"};
+                    }
+                }*/ //,
+                //onEachFeature: onEachFeature
+                //zoomToBounds: zoomToBounds
+            }
+        )
+            .bindPopup(function (layer) {
+                return layer
+                    .feature.properties.title;
+            })
+        .addTo(map);     
+        map.fitBounds(feature.getBounds());
+        /*
+        map.on('moveend', function() { 
+            const bbox_field = document.getElementById("id_bbox");
+            //bbox_field.value = "test";
+            //alert(JSON.stringify(map.getBounds()));
+            const bounds = map.getBounds();
+            bbox_field.value = bounds._southWest.lng + "," + bounds._southWest.lat + "," + bounds._northEast.lng + "," + bounds._northEast.lat;
+       });
+       */
+       function onEachFeature(feature, layer) {
+            layer.on({
+                click: zoomToFeature
+            });
+            //featureByName[feature.properties.name] = layer;
+        }
+        
+        function zoomToBounds(bounds) {
+            console.log(JSON.stringify(bounds));
+            //featureByName[feature.properties.name] = layer;
+        }
+        
+        function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+        }
+        var popup = L.popup()
+    }
+</script>
 {% if farmshop_list %}
 <!-- https://www.paulox.net/2020/12/08/maps-with-django-part-1-geodjango-spatialite-and-leaflet/ -->
     <table class="table">
@@ -25,7 +85,8 @@
         {% endfor %}
         </tbody>
     </table>
+<!-- TODO: markers from farmshops annotated with coordinates -->
+{% leaflet_map "farmshop_list_map" callback="window.map_init_basic" %}
 {% endif %}
 <!-- map with geojson features -->
-{{ markers }}
 {% endblock %}

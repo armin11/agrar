@@ -34,6 +34,7 @@ from django.core.mail import send_mail
 
 from django_tables2 import SingleTableView
 from .tables import OrderTable
+from django.contrib.gis.db.models.functions import AsGeoJSON
 
 #from queryset_sequence import QuerySetSequence
 """
@@ -742,20 +743,30 @@ class HofladenListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
+        # https://stackoverflow.com/questions/25401103/django-how-can-you-include-annotated-results-in-a-serialized-queryset/60946078
         locations1 = context["farmshop_list"].select_related("postal_address").annotate(location=Cast("postal_address__location", output_field=PointField()))
-
-
-        #locations = context["farmshop_list"].select_related("postal_address")
-        #locations2 = QuerySetSequence(locations)
+        # other arraoach 
+        # https://dakdeniz.medium.com/increase-django-geojson-serialization-performance-7cd8cb66e366
+        locations = context["farmshop_list"].select_related("postal_address").annotate(geometry=AsGeoJSON("postal_address__location")).values("id", "title", "geometry")
+        feature_collection = {}
+        feature_collection['type'] = "FeatureCollection"
+        feature_collection['crs'] = {'type': 'name', 'properties': {'name': 'EPSG:4326'}}
+        feature_collection['features'] = []
+        for feature in locations:
+            new_feature = {}
+            new_feature['type'] = 'Feature'
+            new_feature['id'] = feature['id']
+            properties = {}
+            properties['id'] = feature['id']
+            properties['title'] = feature['title']
+            new_feature['properties'] = properties
+            new_feature['geometry'] = json.loads(feature['geometry'])
+            feature_collection['features'].append(new_feature)
+        context["markers"] = json.dumps(feature_collection)
         locations = PostalAddress.objects.all()
-
-        print(locations.query)
-        #locations = locations.objects.all()
-        #print(locations.query)
-        context["markers"] = json.loads(
-            serialize("geojson", locations, geometry_field='location')
-        )
+        #context["markers1"] = json.loads(
+        #    serialize("geojson", locations, geometry_field='location')
+        #)
         return context
 
 
