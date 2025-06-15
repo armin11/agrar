@@ -29,7 +29,7 @@ urlpatterns = [
     path("hofladen/", HofladenListView.as_view(template_name="farmshop/frontend/hofladen_list.html"), name="hofladen-list"),
     path("hofladen/map/", HofladenListView.as_view(template_name="farmshop/frontend/hofladen_map.html"), name="hofladen-map"),
   
-    path("hofladen/<int:pk>/", HofladenDetailView.as_view(template_name="farmshop/frontend/hofladen_detail.html"), name="hofladen-detail"),
+    path("hofladen/<int:pk>/", HofladenNewsView.as_view(template_name="farmshop/frontend/hofladen_news.html"), name="hofladen-detail"),
     path("hofladen/<int:pk>/address/", HofladenDetailView.as_view(template_name="farmshop/frontend/hofladen_address.html"), name="hofladen-address"),
     path("hofladen/<int:pk>/productgroup/", HofladenProductGroupView.as_view(template_name="farmshop/frontend/hofladen_productgroup.html"), name="hofladen-productgroup"),
     path("hofladen/<int:pk>/package/", HofladenPackageView.as_view(template_name="farmshop/frontend/hofladen_package.html"), name="hofladen-package"),

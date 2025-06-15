@@ -31,7 +31,7 @@
             {% endif %}
             <a href="{% url 'home' %}" class="navbar-brand">Hofladen Verwaltung</a>
             {% if user.is_authenticated %}
-                <a href="{% url 'farmshop-list' %}" class="navbar-brand">Hofläden</a>
+                <a href="{% url 'farmshop-list' %}" class="navbar-brand">Meine Hofläden</a>
                 <p>
                     Angemeldeter Benutzer: {{ user.username }} <br>
                     <a href="{% url 'logout' %}" class="navbar-item">Abmelden</a>

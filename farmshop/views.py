@@ -20,7 +20,7 @@ from leaflet.forms.widgets import LeafletWidget
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
-from django.db.models import Count, Sum, IntegerField, Value
+from django.db.models import Count, Sum, IntegerField, Value, Prefetch
 from django.db.models.functions import Cast, Coalesce
 from django.db.models import Subquery, OuterRef, F, Q
 #from .forms import OrderLineFormSet
@@ -306,8 +306,18 @@ def hofladen_preorder_create(request, shopid, preorder_id):
     farmshop = FarmShop.objects.get(pk=shopid)
 
     #package = Package.objects.get(pk=package_id)
-
-    CustomerForm = modelform_factory(Customer, fields=["name", "first_name", "email"])
+    # TODO: Problem - required = true is not shown in html template ...?
+    # https://docs.djangoproject.com/en/4.2/ref/forms/models/#django.forms.models.modelform_factory
+    #email_field = forms.EmailField(required=True)
+    CustomerForm = modelform_factory(Customer, fields=["name", "first_name", "email", "phone"], 
+                                     #labels={'name': "Nachname *", "first_name": "Vorname *", "email": "EMail *", "phone": "Telefonnummer *"},
+                                     #help_texts={'name': 'test hilfe'},
+                                     #field_classes={'email': email_field},
+                                     widgets={
+                                        'email': forms.EmailInput(attrs={'required':True}),
+                                        'name': forms.TextInput(attrs={'required':True}),
+                                        }
+                                    )
     # get list of preorderable packages for choosing the preorder relation - there should only one !
     preorderable_packages = PreOrder.objects.filter(generic_id=preorder_id, start_date__lte = date.today(), end_date__gte = date.today()).prefetch_related("package")
     preorder = preorderable_packages[:1].get()
@@ -319,6 +329,7 @@ def hofladen_preorder_create(request, shopid, preorder_id):
     #preorder = preorderable_packages.values()
     #package = preorder.package.first()
     max_amount = package.available_for_preorder - package.preordered# - preorderable_packages.get().max_packages - confirmed_orders["orderline__amount__sum"]
+    # https://stackoverflow.com/questions/58981030/formset-factory-make-fields-required
     OrderLineForm = modelform_factory(OrderLine, fields=["amount"],
                                       widgets={'amount': forms.NumberInput(attrs={'min':1, 'max':max_amount,'type':'number'}),
                                                }
@@ -341,7 +352,7 @@ def hofladen_preorder_create(request, shopid, preorder_id):
             customer.save()
             # pre save order model
             order = order_form.save(commit=False)
-            order.target_date = "2000-01-01"
+            #order.target_date = "2000-01-01"
             order.customer = customer
             order.farmshop = farmshop
             # add metadata 
@@ -370,8 +381,12 @@ def hofladen_preorder_create(request, shopid, preorder_id):
             #
             preorder_link = f"{preorder_url}"
             send_mail(
-                "Ihre Vorbestellung bei " + str(farmshop.title),
-                "Hier der Link: " + request.scheme + "://" + request.get_host() + preorder_link,
+                "Vorbestellung vom " + datetime.today().strftime('%Y-%m-%d') + " bei " + str(farmshop.title),
+                "Vielen Dank für Deine Vorbestellung.\n" \
+                "Falls du die Bestellung ansehen oder stornieren willst, kannst du das über den folgenden Link tun:\n"
+                 + request.scheme + "://" + request.get_host() + preorder_link + "\n"
+                 + "Dein Team vom " + str(farmshop.title) + "\n" 
+                 + "Für telefonische Rückfragen: " + str(farmshop.contact_phone),
                 settings.EMAIL_HOST_USER,
                 [str(order.customer.email), ],
                 fail_silently=False,
@@ -386,7 +401,7 @@ def hofladen_preorder_create(request, shopid, preorder_id):
         order_form = PreOrderForm(prefix='order')
         #orderline_form = OrderLineForm(request.POST, prefix='orderline')
         orderline_form = OrderLineForm( initial={'package': Package.objects.get(pk=package_id)}, prefix='orderline')
-    return render(request, "farmshop/guest/guest_preorder_create.html", {'form1': customer_form, 'form2': order_form, 'form3': orderline_form, 'farmshop': farmshop, 'package': package })
+    return render(request, "farmshop/guest/guest_preorder_create.html", {'form1': customer_form, 'form2': order_form, 'form3': orderline_form, 'farmshop': farmshop, 'package': package , 'preorder': preorder})
 
 """
 Function based view that allows the configuration of the previausly created preorder.
@@ -1363,10 +1378,18 @@ class PreOrderCreateView(MyFarmShopCreateView):
 
 class PreOrderListView(MyFarmShopListView):
     model = PreOrder
-    """
+
+    
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).select_related('order_set').all()
-    """
+        # https://www.geeksforgeeks.org/python/filter-objects-with-count-annotation-in-django/
+        # related_name for order is orders 
+        # TOD: check if that is the right way of do it!
+        qs = super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter=Q(orders__cancelled=False)).filter(filter='1')
+        return qs
+        
+        #return super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter= Q(orders__cancelled=False))
+        
+
     # database table names differ from object names
     #context_object_name = 'PreOrder_list'
 
@@ -1485,7 +1508,7 @@ class OrderListView(MyOwnFarmShopListView):
 class OrderUpdateView(MyOwnFarmShopUpdateView):
     model = Order
 
-    fields = ["target_date", "notice"]
+    fields = ["target_date", "notice", "picked_up"]
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=None)
@@ -1540,7 +1563,7 @@ class PreOrderOrderListView(MyOwnFarmShopListView):
 class PreOrderOrderUpdateView(MyOwnFarmShopUpdateView):
     model = Order
 
-    fields = ["target_date", "notice"]
+    fields = ["target_date", "notice", "picked_up"]
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=None)

@@ -12,6 +12,7 @@
             <th>ID</th>
             <th>Erstellt</th>
             <th>Letzte Änderung</th>
+            <th>Packung/Paket</th>
             <th>Anmerkung</th>
             <th>Beginn</th>
             <th>Ende</th>
@@ -27,11 +28,12 @@
                 <td>{{ preorder.id }}</td>
                 <td>{{ preorder.created }}</td>
                 <td>{{ preorder.changed }}</td>
+                <td>{{ preorder.package.title }}</td>
                 <td>{{ preorder.notice }}</td>
                 <td>{{ preorder.start_date }}</td>
                 <td>{{ preorder.end_date }}</td>
                 <td>{{ preorder.max_packages }}</td>
-                <td><a href="{% url 'preorder-detail' pk=preorder.id shopid=farmshop.id%}">{{ preorder.order_set.all.count }}</a></td>
+                <td><a href="{% url 'preorder-detail' pk=preorder.id shopid=farmshop.id%}">{{ preorder.not_cancelled_orders }}</a></td>
                 <td><a href="{% url 'preorder-update' pk=preorder.id shopid=farmshop.id%}">Bearbeiten</a></td>
                 <td><a href="{% url 'preorder-delete' pk=preorder.id shopid=farmshop.id%}">Löschen</a></td>
             </tr>

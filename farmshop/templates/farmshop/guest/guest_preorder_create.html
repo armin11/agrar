@@ -4,14 +4,17 @@
   Vorbestellung
 {% endblock %}
 {% block content %}
+    <p><b>Bitte beachten:</b> Die bestellte Menge bezieht sich jeweils auf die Einheit eines Paketes. Bei Hähnchen ist beispielsweise ein Kilopreis angegeben. Große Hähnchen können aber bis zu 3kg wiegen.</p>
+    <p>{{ preorder.notice }}</p>
     <p><h2>{{ package.title }}</h2></p>
-    <p>Vorbestellungen werden genutzt um ...</p>
+    <p><i>{{ package.description }}</i></p>
     <!-- Load jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{ form1.media }}
     {{ form2.media }}
     {{ form3.media }}
-    Einzelpreis: {{ package.price }}€
+    <p>Einzelpreis: {{ package.price }}€</p>
+    <p>Einheit: {{ package.units }} {{ package.get_unit_display }}</p>
     <form method="POST">
         {% csrf_token %}
         {% bootstrap_form form3 %}

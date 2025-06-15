@@ -492,10 +492,10 @@ class Inventory(FarmShopMetadata):
     
 
 class Customer(FarmShopMetadata):
-    name = models.CharField(max_length=300, verbose_name="Name")
-    first_name = models.CharField(max_length=300, verbose_name="Vorname")
-    email = models.EmailField(verbose_name="E-Mail")
-    phone = models.CharField(max_length=300, verbose_name="Telefonnummer")
+    name = models.CharField(blank=False, null=False, max_length=300, verbose_name="Name", help_text="Nachname *")
+    first_name = models.CharField(blank=True, null=True, max_length=300, verbose_name="Vorname", help_text="Vorname")
+    email = models.EmailField(blank=False, null=False, verbose_name="E-Mail", help_text="EMail-Adresse *")
+    phone = models.CharField(blank=True, null=True, max_length=300, verbose_name="Telefonnummer", help_text="Telefonnummer")
     newsletter = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
@@ -509,7 +509,7 @@ class PreOrder(FarmShopMetadata):
 
     package = models.ForeignKey(Package, on_delete=models.CASCADE, verbose_name="Packung/Paket", null=True, blank=True)
     max_packages = models.IntegerField(verbose_name="Maximal bestellbare Packungen", default=1)
-
+    
     def __str__(self):
         return f"Vorbestellung Nummer {self.id}"
     
@@ -518,13 +518,15 @@ class Order(FarmShopMetadata):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name="Kunde", help_text="Kunde", null=True, blank=True)
     notice = models.CharField(max_length=4096, verbose_name="Anmerkungen", null=True, blank=True)
     #order_date = models.DateField(verbose_name="Bestelldatum")
-    target_date = models.DateField(verbose_name="Abholdatum")
+    target_date = models.DateField(blank=True, null=True, verbose_name="Abholdatum")
     order_type = "internet"
     confirmed = models.BooleanField(verbose_name="Bestätigt", default=False, help_text="Nach der Bestätigung kann die Bestellung nicht mehr bearbeitet werden. Bitte stornieren Sie sie, wenn sie Fehler enthält.")
     cancelled = models.BooleanField(verbose_name="Storniert", default=False, help_text="Nach der Stornierung kann die Bestellung nicht mehr bearbeitet werden. Die Informationen werden verworfen.")
     # new to allow preorders
-    preorder = models.ForeignKey(PreOrder, on_delete=models.CASCADE, verbose_name="Vorbestellung", null=True, blank=True)
-    
+    preorder = models.ForeignKey(PreOrder, on_delete=models.CASCADE, verbose_name="Vorbestellung", null=True, blank=True, related_name="orders")
+    picked_up = models.BooleanField(verbose_name="Abgeholt", default=False, help_text="Bestellung wurde abgeholt")
+
+
     def total_price(self):
         sum = 0.0
         orderlines = OrderLine.objects.filter(order=self.pk)

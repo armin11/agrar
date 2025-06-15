@@ -52,6 +52,7 @@
         <tr>
             <th class="col">Packung / Paket</th>
             <th class="col">Menge</th>
+            <th class="col">Einheit</th>
             <th class="col">Einzelpreis</th>
             <th class="col">Gesamtpreis</th>
             <th class="col"></th>
@@ -60,8 +61,9 @@
     <tbody>
     {% for orderline in order.orderline_set.all %}
         <tr>
-            <td>{{ orderline.package }}</td>
+            <td>{{ orderline.package }}, <i>{{orderline.package.description}}</i></td>
             <td>{{ orderline.amount }}</td>
+            <td>{{ orderline.package.get_unit_display }}</td>
             <td>{{ orderline.package.price }} €</td>
             <td>{{ orderline.total_price|floatformat:2 }} €</td>
         </tr>

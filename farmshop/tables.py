@@ -21,4 +21,4 @@ class OrderTable(tables.Table):
     class Meta:
         model = Order
         template_name = "django_tables2/bootstrap.html"
-        fields = ("id", "changed", "sum_amount", "confirmed", "cancelled", "customer.first_name", "customer.name", "customer.phone", "customer.email", "edit", "delete")
+        fields = ("id", "changed", "sum_amount", "confirmed", "cancelled", "picked_up", "customer.first_name", "customer.name", "customer.phone", "customer.email", "target_date", "notice", "edit", "delete")
