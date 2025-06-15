@@ -1379,16 +1379,16 @@ class PreOrderCreateView(MyFarmShopCreateView):
 class PreOrderListView(MyFarmShopListView):
     model = PreOrder
 
-    
+    """"
     def get_queryset(self, **kwargs):
         # https://www.geeksforgeeks.org/python/filter-objects-with-count-annotation-in-django/
         # related_name for order is orders 
         # TOD: check if that is the right way of do it!
-        qs = super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter=Q(orders__cancelled=False))#.filter(filter='1')
+        qs = super().get_queryset(**kwargs).prefetch_related('orders').annotate(not_cancelled_orders=Count("orders"), filter=Q(orders__cancelled=False))#.filter(filter='1')
         return qs
         
         #return super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter= Q(orders__cancelled=False))
-        
+    """    
 
     # database table names differ from object names
     #context_object_name = 'PreOrder_list'
@@ -1563,7 +1563,7 @@ class PreOrderOrderListView(MyOwnFarmShopListView):
 class PreOrderOrderUpdateView(MyOwnFarmShopUpdateView):
     model = Order
 
-    fields = ["target_date", "notice", "picked_up"]
+    fields = ["cancelled", "target_date", "notice", "picked_up"]
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=None)

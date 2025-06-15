@@ -33,7 +33,7 @@
                 <td>{{ preorder.start_date }}</td>
                 <td>{{ preorder.end_date }}</td>
                 <td>{{ preorder.max_packages }}</td>
-                <td><a href="{% url 'preorder-detail' pk=preorder.id shopid=farmshop.id%}">{{ preorder.not_cancelled_orders }}</a></td>
+                <td><a href="{% url 'preorder-detail' pk=preorder.id shopid=farmshop.id%}">{{ preorder.package.preordered }}</a></td>
                 <td><a href="{% url 'preorder-update' pk=preorder.id shopid=farmshop.id%}">Bearbeiten</a></td>
                 <td><a href="{% url 'preorder-delete' pk=preorder.id shopid=farmshop.id%}">Löschen</a></td>
             </tr>
