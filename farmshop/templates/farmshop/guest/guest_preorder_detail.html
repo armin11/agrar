@@ -15,8 +15,13 @@
 {% block content %}
 <h2>Meine Vorbestellung {{ order.generic_id }}</h2>
 <p><b>Laufende Nummer:</b> {{ order.id }}</p>
-<p><b>Kunde:</b> {{ order.customer.name }}, {{ order.customer.first_name }}</p>
-<p><b>Notiz:</b> {{ order.notice }}</p>
+{% if order.preorder.notice %}
+<p><b>Weitere Infos:</b> {{ order.preorder.notice }}</p>
+{% endif %}
+<p><b>Kunde:</b> {{ order.customer.name }}{% if order.customer.first_name %}, {{ order.customer.first_name }}{% endif %}</p>
+{% if order.notice %}
+<p><b>Anmerkung:</b> {{ order.notice }}</p>
+{% endif %}
 <p><b>Bestelldatum:</b> {{ order.changed }}</p>
 <p><b>Gesamtpreis:</b> {{ order.total_price|floatformat:2 }} €</p>
 {% if order.confirmed %}
