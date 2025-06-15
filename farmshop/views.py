@@ -1528,7 +1528,7 @@ class OrderDeleteView(MyOwnFarmShopDeleteView):
 
 
 """
-PreOrder managemet for backend
+PreOrder management for backend
 """
 class PreOrderOrderCreateView(MyOwnFarmShopCreateView):
     model = Order
@@ -1567,6 +1567,7 @@ class PreOrderOrderUpdateView(MyOwnFarmShopUpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=None)
+        form.fields['target_date'].widget = DatePickerInput()
         #form.fields['package'].queryset = form.fields['package'].queryset.filter(farmshop=self.kwargs['shopid'])
         #form.fields['warehouse'].queryset = form.fields['warehouse'].queryset.filter(farmshop=self.kwargs['shopid'])
         return form 

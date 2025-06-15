@@ -7,6 +7,7 @@
     Meine Bestellung bearbeiten
 {% endblock %}
 {% block content %}
+{{ form.media }}
     <form method="POST" class="log-form" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form form %}
