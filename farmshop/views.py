@@ -1384,7 +1384,7 @@ class PreOrderListView(MyFarmShopListView):
         # https://www.geeksforgeeks.org/python/filter-objects-with-count-annotation-in-django/
         # related_name for order is orders 
         # TOD: check if that is the right way of do it!
-        qs = super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter=Q(orders__cancelled=False)).filter(filter='1')
+        qs = super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter=Q(orders__cancelled=False))#.filter(filter='1')
         return qs
         
         #return super().get_queryset(**kwargs).annotate(not_cancelled_orders=Count("orders"), filter= Q(orders__cancelled=False))
