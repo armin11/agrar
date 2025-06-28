@@ -10,7 +10,7 @@
     {% if news.image %}
     <img src="{{ news.image.url }}" height="200px" class="card-img-top" title="Bild für {{ news.title }}" alt="{{ news.title }}">
     {% else %}
-    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ news.title }} eingestellt!">
+    <img src="/media/dummy.png" height="200px" class="card-img-top" alt="Kein Bild für {{ news.title }} eingestellt!">
     {% endif %}
     <div class="card-body">
       <p class="card-text">{{ news.publication_date }}</p>

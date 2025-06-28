@@ -9,7 +9,7 @@
     {% if news.image %}
     <img src="{{ news.image.url }}" height="100px" class="mr-3" alt="{{ news.title }}">
     {% else %}
-    <img src="..." class="mr-3" alt="Kein Bild für {{ news.title }} eingestellt!">
+    <img src="/media/dummy.png" class="mr-3" alt="Kein Bild für {{ news.title }} eingestellt!">
     {% endif %}
     <div class="media-body">
       <p>{{ news.publication_date }}</p>

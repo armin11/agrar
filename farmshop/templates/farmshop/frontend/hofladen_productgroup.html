@@ -10,7 +10,7 @@
     {% if productgroup.image %}
     <img src="{{ productgroup.image.url }}" height="200px" class="card-img-top" title="Bild für {{ productgroup.title }}" alt="{{ productgroup.title }}">
     {% else %}
-    <img src="..." height="200px" class="card-img-top" alt="Kein Bild für {{ productgroup.title }} eingestellt!">
+    <img src="/media/dummy.png" height="200px" class="card-img-top" alt="Kein Bild für {{ productgroup.title }} eingestellt!">
     {% endif %}
     <div class="card-body">
       <h5 class="card-title">{{ productgroup.title }}</h5>
