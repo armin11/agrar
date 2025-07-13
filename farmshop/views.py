@@ -395,16 +395,16 @@ def hofladen_preorder_create(request, shopid, preorder_id):
             """
             # alternative email 
             email = EmailMessage(
-                "Vorbestellung vom " + datetime.today().strftime('%Y-%m-%d') + " bei " + str(farmshop.title),
-                "Vielen Dank für Deine Vorbestellung.\n" \
+                subject="Vorbestellung vom " + datetime.today().strftime('%Y-%m-%d') + " bei " + str(farmshop.title),
+                body="Vielen Dank für Deine Vorbestellung.\n" \
                 "Falls du die Bestellung ansehen oder stornieren willst, kannst du das über den folgenden Link tun:\n"
                  + request.scheme + "://" + request.get_host() + preorder_link + "\n"
                  + "Dein Team vom " + str(farmshop.title) + "\n" 
                  + "Für telefonische Rückfragen: " + str(farmshop.contact_phone),
-                settings.EMAIL_HOST_USER,
-                [str(order.customer.email),],
-                [str(farmshop.contact_email),],
-                reply_to=[str(farmshop.contact_email)]
+                from_email=settings.EMAIL_HOST_USER,
+                to_email=[str(order.customer.email),],
+                bcc=[str(farmshop.contact_email),],
+                reply_to=[str(farmshop.contact_email),]
             )
             email.content_subtype = "text"
             email.send(fail_silently=True)
