@@ -402,7 +402,7 @@ def hofladen_preorder_create(request, shopid, preorder_id):
                  + "Dein Team vom " + str(farmshop.title) + "\n" 
                  + "Für telefonische Rückfragen: " + str(farmshop.contact_phone),
                 from_email=settings.EMAIL_HOST_USER,
-                to_email=[str(order.customer.email),],
+                to=[str(order.customer.email),],
                 bcc=[str(farmshop.contact_email),],
                 reply_to=[str(farmshop.contact_email),]
             )
