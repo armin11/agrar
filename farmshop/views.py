@@ -30,7 +30,7 @@ from captcha.fields import CaptchaField
 import json
 from django.core.serializers import serialize
 from django.contrib.gis.db.models import PointField
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 
 from django_tables2 import SingleTableView
 from .tables import OrderTable
@@ -380,6 +380,7 @@ def hofladen_preorder_create(request, shopid, preorder_id):
             #https://opensource.com/article/22/12/django-send-emails-smtp
             #
             preorder_link = f"{preorder_url}"
+            """
             send_mail(
                 "Vorbestellung vom " + datetime.today().strftime('%Y-%m-%d') + " bei " + str(farmshop.title),
                 "Vielen Dank für Deine Vorbestellung.\n" \
@@ -391,6 +392,22 @@ def hofladen_preorder_create(request, shopid, preorder_id):
                 [str(order.customer.email), ],
                 fail_silently=False,
             )
+            """
+            # alternative email 
+            email = EmailMessage(
+                "Vorbestellung vom " + datetime.today().strftime('%Y-%m-%d') + " bei " + str(farmshop.title),
+                "Vielen Dank für Deine Vorbestellung.\n" \
+                "Falls du die Bestellung ansehen oder stornieren willst, kannst du das über den folgenden Link tun:\n"
+                 + request.scheme + "://" + request.get_host() + preorder_link + "\n"
+                 + "Dein Team vom " + str(farmshop.title) + "\n" 
+                 + "Für telefonische Rückfragen: " + str(farmshop.contact_phone),
+                settings.EMAIL_HOST_USER,
+                [str(order.customer.email),],
+                [str(farmshop.contact_email),],
+                reply_to=[str(farmshop.contact_email)]
+            )
+            email.content_subtype = "text"
+            email.send(fail_silently=True)
             # save id of created order to session 
             request.session["preorder_id"] = str(order.generic_id)
             return redirect("hofladen-preorder-configure", shopid=shopid, generic_id=order.generic_id)
@@ -925,7 +942,7 @@ class FarmShopListView(MyListView):
 
 class FarmShopCreateView(MyCreateView):
     model = FarmShop
-    fields = ["title", "description", "farmshop_logo", "contact_phone", "impressum", "css_style", "postal_address"]
+    fields = ["title", "description", "farmshop_logo", "contact_phone", "contact_email", "impressum", "css_style", "postal_address"]
     success_url = reverse_lazy("farmshop-list")   
 
     def get_form(self, form_class=None):
@@ -937,7 +954,7 @@ class FarmShopCreateView(MyCreateView):
 class FarmShopUpdateView(MyUpdateView):
     model = FarmShop
 
-    fields = ["title", "description", "farmshop_logo", "contact_phone", "impressum", "css_style", "postal_address"]
+    fields = ["title", "description", "farmshop_logo", "contact_phone",  "contact_email", "impressum", "css_style", "postal_address"]
     success_url = reverse_lazy("farmshop-list") 
 
     def get_form(self, form_class=None):

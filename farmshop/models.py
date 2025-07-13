@@ -60,6 +60,7 @@ class FarmShop(GenericMetadata):
     title = models.CharField(max_length=300, verbose_name="Hofladen")
     description = models.CharField(max_length=4096, verbose_name="Beschreibung Hofladen")
     contact_phone = models.CharField(max_length=30, blank=True, null=True, verbose_name="Kontakttelefon für Anfragen")
+    contact_email = models.EmailField(blank=True, null=True, verbose_name="E-Mail", help_text="Kontakt E-Mail*")
     impressum = models.TextField(blank=True, null=True, verbose_name="Impressum Hofladen")
     css_style = models.TextField(blank=True, null=True, verbose_name="CSS-Style für Seite")
     farmshop_logo = models.ImageField(blank=True, null = True, upload_to=get_upload_path, verbose_name="Logo", help_text="Graphik mit Logo")
